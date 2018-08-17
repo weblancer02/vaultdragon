@@ -12,8 +12,7 @@ const KeyValueSchema = new Schema({
     default: ""
   },
   timestamp: {
-    type: Number,
-    default: Math.floor(Date.now() / 1000)
+    type: Number
   }
 });
 

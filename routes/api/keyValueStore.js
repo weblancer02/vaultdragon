@@ -14,28 +14,16 @@ router.post("/", (req, res) => {
     return res.status(400).json("Key is required");
   }
 
-  KeyValueStore.findOne({ key: req.body.key })
-    .then(key => {
-      if (key) {
-        return (
-          res
-            // WIP : Change to update instead of validating existing key
-            .status(400)
-            .json({ key: `Key ${req.body.key} already exists` })
-        );
-      } else {
-        const newKey = new KeyValueStore({
-          key: req.body.key,
-          value: req.body.value
-        });
+  const newKey = new KeyValueStore({
+    key: req.body.key,
+    value: req.body.value,
+    timestamp: Math.floor(Date.now() / 1000)
+  });
 
-        newKey
-          .save()
-          .then(newKey => res.json(newKey))
-          .catch(err => console.log(err));
-      }
-    })
-    .catch(err => res.status(404).json(err));
+  newKey
+    .save()
+    .then(newKey => res.json(newKey))
+    .catch(err => console.log(err));
 });
 
 // @route   GET api/object/:key
@@ -43,17 +31,41 @@ router.post("/", (req, res) => {
 // @access  Public
 
 router.get("/:key", (req, res) => {
-  KeyValueStore.findOne({ key: req.params.key })
-    .then(key => {
-      if (key) {
-        res.json({ value: key.value });
-      } else {
-        return res
-          .status(400)
-          .json({ key: `No matching key found for ${req.params.key}` });
+  // If key and timestamp is provided
+  // use find() whereas findOne for req without timestamp
+  if (req.query.timestamp)
+    KeyValueStore.findOne({
+      key: req.params.key,
+      timestamp: {
+        $lte: req.query.timestamp
       }
     })
-    .catch(err => res.status(404).json(err));
+      .sort({ timestamp: -1 })
+      .then(key => {
+        if (key) {
+          res.json({ value: key.value });
+        } else {
+          return res.status(400).json({
+            key: `No matching key found for ${req.params.key} with ${
+              req.query.timestamp
+            } timestamp.`
+          });
+        }
+      })
+      .catch(err => res.status(404).json(err));
+  else
+    KeyValueStore.findOne({ key: req.params.key })
+      .sort({ timestamp: -1 })
+      .then(key => {
+        if (key) {
+          res.json({ value: key.value });
+        } else {
+          return res
+            .status(400)
+            .json({ key: `No matching key found for ${req.params.key}` });
+        }
+      })
+      .catch(err => res.status(404).json(err));
 });
 
 module.exports = router;

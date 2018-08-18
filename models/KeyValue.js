@@ -8,7 +8,7 @@ const KeyValueSchema = new Schema({
     required: true
   },
   value: {
-    type: {},
+    type: Object,
     default: ""
   },
   timestamp: {

@@ -10,6 +10,17 @@ const app = express();
 // Body Parser Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(function(error, req, res, next) {
+  // We need to handle errors in app level for SyntaxError in JSON Object
+  if (error instanceof SyntaxError) {
+    res.status(400).json({
+      key:
+        "Invalid JSON Object format. Request should have { Key : Value } pair"
+    });
+  } else {
+    next();
+  }
+});
 
 // DB Config
 const db = require("./config/keys").mongoURI;

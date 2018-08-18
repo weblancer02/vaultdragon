@@ -23,22 +23,27 @@ app.use(function(error, req, res, next) {
 });
 
 // DB Config
-const db = require("./config/keys").mongoURI;
+
+const db = require("./config/keys").mongoURI[app.settings.env];
 
 // Connect to Mongodb
-mongoose
-  .connect(
-    db,
-    { useNewUrlParser: true }
-  )
-  .then(() => console.log("MongoDB connected successfully"))
-  .catch(err => console.log(err));
+mongoose.connect(
+  db,
+  { useNewUrlParser: true }
+);
+// .then(() => console.log("# MongoDB connected successfully"))
+// .catch(err => console.log(err));
 
 const port = process.env.PORT || 5000;
 
-app.get("/", (req, res) => res.send());
+app.get("/", (req, res) => res.send("Vault Dragon Coding Test"));
 
 //Use Route
+const server = app.listen(port);
+console.log("##################################");
+console.log(`# Environment : ${app.settings.env}`);
+console.log(`# Server running on port ${port}`);
+
 app.use("/api/object", keyValueStore);
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+module.exports = server;

@@ -1,6 +1,3 @@
-// Set test environment
-app.settings.env = "test";
-
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const server = require("../server");
@@ -24,7 +21,7 @@ const newKey = new KeyValueStore({
 mongoose.Promise = global.Promise;
 
 // DB Config
-const db = require("../config/keys").mongoURI[app.settings.env];
+const db = require("../config/keys").mongoURI[process.env.NODE_ENV];
 
 chai.use(chaiHttp);
 

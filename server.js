@@ -44,6 +44,6 @@ console.log("##################################");
 console.log(`# Environment : ${app.settings.env}`);
 console.log(`# Server running on port ${port}`);
 
-app.use("/api/object", keyValueStore);
+app.use("/object", keyValueStore);
 
 module.exports = server;

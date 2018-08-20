@@ -1,5 +1,5 @@
 // Set test environment
-process.env.NODE_ENV = "test";
+app.settings.env = "test";
 
 const chai = require("chai");
 const chaiHttp = require("chai-http");
@@ -24,7 +24,7 @@ const newKey = new KeyValueStore({
 mongoose.Promise = global.Promise;
 
 // DB Config
-const db = require("../config/keys").mongoURI[process.env.NODE_ENV];
+const db = require("../config/keys").mongoURI[app.settings.env];
 
 chai.use(chaiHttp);
 
@@ -93,7 +93,7 @@ describe("POST /", () => {
 });
 
 describe("GET /", () => {
-  it("should be able to GET response text and status(200)", done => {
+  it("should be able to GET / response text and status(200)", done => {
     chai
       .request(server)
       .get("/")

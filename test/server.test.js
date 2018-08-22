@@ -21,7 +21,10 @@ const newKey = new KeyValueStore({
 mongoose.Promise = global.Promise;
 
 // DB Config
-const db = require("../config/keys").mongoURI[process.env.NODE_ENV];
+const db =
+  process.env.MONGODB_URI !== undefined
+    ? process.env.MONGODB_URI
+    : require("../config/keys").MONGODB_URI["development"];
 
 chai.use(chaiHttp);
 

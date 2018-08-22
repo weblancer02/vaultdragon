@@ -23,8 +23,10 @@ app.use(function(error, req, res, next) {
 });
 
 // DB Config
-
-const db = require("./config/keys").mongoURI[app.settings.env];
+const db =
+  process.env.MONGODB_URI !== undefined
+    ? process.env.MONGODB_URI
+    : require("./config/keys").MONGODB_URI[app.settings.env];
 
 // Connect to Mongodb
 mongoose.connect(

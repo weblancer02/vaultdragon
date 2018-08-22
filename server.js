@@ -29,12 +29,10 @@ const db =
     : require("./config/keys").MONGODB_URI[app.settings.env];
 
 // Connect to Mongodb
-mongoose.connect(
-  db,
-  { useNewUrlParser: true }
-);
-// .then(() => console.log("# MongoDB connected successfully"))
-// .catch(err => console.log(err));
+mongoose
+  .connect("mongodb://ramnel:dragon1@ds121982.mlab.com:21982/vaultdragon")
+  .then(() => console.log("# MongoDB connected successfully"))
+  .catch(err => console.log(err));
 
 const port = process.env.PORT || 5000;
 

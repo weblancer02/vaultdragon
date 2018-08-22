@@ -36,6 +36,7 @@ mongoose
 
 const port = process.env.PORT || 5000;
 
+app.set("port", port);
 app.get("/", (req, res) => res.send("Vault Dragon Coding Test"));
 
 //Use Route

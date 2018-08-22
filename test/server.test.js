@@ -33,8 +33,7 @@ chai.use(chaiHttp);
 describe("DATABASE", () => {
   it("should be able to connect to 'test' MongoURI", done => {
     mongoose.connect(
-      db,
-      { useNewUrlParser: true }
+      "mongodb://ramnel:dragon1@ds121982.mlab.com:21982/vaultdragon"
     );
     mongoose.connection
       .once("open", () => done())

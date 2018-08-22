@@ -19,7 +19,7 @@ const newKey = new KeyValueStore({
 });
 
 // Assign ES6 promise to mongoose Promise for deprecation warnings.
-// mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;
 
 // DB Config
 const db =

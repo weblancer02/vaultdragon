@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const mongodb = require("mongodb").MongoClient;
 
+mongoose.Promise = global.Promise;
+
 // Define Object route
 const keyValueStore = require("./routes/api/keyValueStore");
 
@@ -30,7 +32,7 @@ const db =
     : require("./config/keys").MONGODB_URI["development"];
 
 // Connect to Mongodb
-mongodb
+mongoose
   .connect(
     db,
     {

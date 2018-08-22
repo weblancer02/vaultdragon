@@ -4,6 +4,7 @@ const server = require("../server");
 const expect = chai.expect;
 const should = chai.should();
 const mongoose = require("mongoose");
+const mongodb = require("mongodb").MongoClient;
 
 let vaultTimeStamp = null;
 
@@ -18,7 +19,7 @@ const newKey = new KeyValueStore({
 });
 
 // Assign ES6 promise to mongoose Promise for deprecation warnings.
-mongoose.Promise = global.Promise;
+// mongoose.Promise = global.Promise;
 
 // DB Config
 const db =
@@ -32,12 +33,23 @@ chai.use(chaiHttp);
 // the DATABASE tests below may fail if response timeout exceeds 2000ms
 describe("DATABASE", () => {
   it("should be able to connect to 'test' MongoURI", done => {
-    mongoose.connect(
-      "mongodb://ramnel:dragon1@ds121982.mlab.com:21982/vaultdragon"
-    );
-    mongoose.connection
+    console.log;
+    mongoose
+      .connect(
+        db,
+        {
+          auth: {
+            user: "dragontest",
+            password: "dragon1"
+          }
+        },
+        { useNewUrlParser: true }
+      )
+      .then()
+      .catch(err => console.log("ERROR:" + err));
+    mongodb.connection
       .once("open", () => done())
-      .on("error", err => console.warn(err));
+      .on("error", err => console.warn("ERROR: " + err));
   });
 
   it("should be able insert a document to the collection", done => {

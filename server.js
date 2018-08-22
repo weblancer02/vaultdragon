@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const mongodb = require("mongodb").MongoClient;
 
 // Define Object route
 const keyValueStore = require("./routes/api/keyValueStore");
@@ -26,13 +27,22 @@ app.use(function(error, req, res, next) {
 const db =
   process.env.MONGODB_URI !== undefined
     ? process.env.MONGODB_URI
-    : require("./config/keys").MONGODB_URI[app.settings.env];
+    : require("./config/keys").MONGODB_URI["development"];
 
 // Connect to Mongodb
-mongoose
-  .connect("mongodb://ramnel:dragon1@ds121982.mlab.com:21982/vaultdragon")
-  .then(() => console.log("# MongoDB connected successfully"))
-  .catch(err => console.log(err));
+mongodb
+  .connect(
+    db,
+    {
+      auth: {
+        user: "dragontest",
+        password: "dragon1"
+      }
+    },
+    { useNewUrlParser: true }
+  )
+  .then()
+  .catch(err => console.log("ERROR:" + err));
 
 const port = process.env.PORT || 5000;
 
@@ -44,6 +54,8 @@ const server = app.listen(port);
 console.log("##################################");
 console.log(`# Environment : ${app.settings.env}`);
 console.log(`# Server running on port ${port}`);
+console.log(`# Mongodb URI : ${process.env.MONGODB_URI}`);
+console.log(`# Database : ${db}`);
 
 app.use("/object", keyValueStore);
 
